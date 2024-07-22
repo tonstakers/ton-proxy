@@ -4,12 +4,8 @@ name: build app
 
 on:
   push:
-    branches:
-      - '**' # only for debug
-#      - "main"
-#      - "master"
-    tags:
-      - '*'
+    paths:
+      - ton-repo-release.txt
 
 
 jobs:
