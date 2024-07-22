@@ -32,7 +32,7 @@ RUN chown -R 1001:1001 /opt/ton-proxy
 USER tonuser
 
 ARG TIMESTAMP
-ARG COMMIT_HASH
+ARG TON_PROXY_VERSION
 
 LABEL timestamp="${TIMESTAMP}"
 LABEL ton-proxy-version="${TON_PROXY_VERSION}"
