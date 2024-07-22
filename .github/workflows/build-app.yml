@@ -53,3 +53,4 @@ jobs:
           build-args: |
             TIMESTAMP=${{ env.TIMESTAMP }}
             TON_PROXY_VERSION=${{ env.TON_PROXY_VERSION }}
+            UBUNTU_IMAGE_VERSION=${{ env.UBUNTU_IMAGE_VERSION }}
