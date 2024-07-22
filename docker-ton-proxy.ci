@@ -1,23 +1,22 @@
 # Stage 1: Build
-FROM ubuntu:24.04 AS sources
+ARG UBUNTU_IMAGE_VERSION
+FROM ubuntu:${UBUNTU_IMAGE_VERSION} AS sources
 
 ENV DEBIAN_FRONTEND=noninteractive
 WORKDIR /app
 
 
-RUN apt update
+RUN apt update --no-cache
 RUN apt install --no-install-recommends -y  wget unzip apt-transport-https ca-certificates
 
+ARG TON_PROXY_VERSION
 RUN wget https://ton-blockchain.github.io/global.config.json
-RUN wget https://github.com/ton-blockchain/ton/releases/download/v2024.06/ton-linux-x86_64.zip
+RUN wget https://github.com/ton-blockchain/ton/releases/download/${TON_PROXY_VERSION}/ton-linux-x86_64.zip
 RUN unzip ton-linux-x86_64.zip
 RUN chmod +x generate-random-id rldp-http-proxy
 
-RUN ls -la
-
-
 # Stage 2: Run
-FROM ubuntu:24.04
+FROM ubuntu:${UBUNTU_IMAGE_VERSION}
 
 # create user and group
 RUN groupadd -g 1001 tonuser && useradd -u 1001 -g tonuser -d /opt/ton-proxy -s /sbin/nologin -c "TON User" tonuser
@@ -30,6 +29,12 @@ RUN chown -R 1001:1001 /opt/ton-proxy
 
 # set specific user
 USER tonuser
+
+ARG TIMESTAMP
+ARG COMMIT_HASH
+
+LABEL timestamp="${TIMESTAMP}"
+LABEL ton-proxy-version="${TON_PROXY_VERSION}"
 
 
 #EXPOSE 8080
