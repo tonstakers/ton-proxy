@@ -17,10 +17,19 @@ RUN ls -la
 
 # run section
 FROM ubuntu:24.04
+
+# create user and group
+RUN groupadd -g 1001 tonuser && useradd -u 1001 -g tonuser -d /opt/ton-proxy -s /sbin/nologin -c "TON User" tonuser
+
 WORKDIR /opt/ton-proxy
 COPY --from=sources /app/generate-random-id /usr/local/bin
 COPY --from=sources /app/rldp-http-proxy /usr/local/bin
 COPY --from=sources /app/global.config.json /opt/ton-proxy/global.config.json
+RUN chown -R 1001:1001 /opt/ton-proxy
 
-EXPOSE 8080
+# set specific user
+USER tonuser
+
+
+#EXPOSE 8080
 CMD ["rldp-http-proxy"]
